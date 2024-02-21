@@ -4,7 +4,7 @@ aiohttp
 asyncurban
 cowpy
 dnspython
-emoji
+emoji==1.4.1
 gTTS>=2.1.1
 gTTS-token>=1.1.3
 git+https://github.com/voins/google-images-download.git@2cd68173c961324a2c41c61e8b6f40a49663ce60

@@ -281,7 +281,7 @@ def deEmojify(inputString):
     return get_emoji_regexp().sub("", inputString)
 
 
-@register(outgoing=True, pattern=r"^.wolfram (.*)")
+@register(outgoing=True, pattern=r"^.w(?:olf|olfram)? (.*)")
 @grp_exclude()
 async def wolfram(wvent):
     """Wolfram Alpha API"""
