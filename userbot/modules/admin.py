@@ -435,7 +435,7 @@ async def unmoot(unmot):
         await unmot.edit(NO_DB)
         return
     # If admin or creator, inform the user and start unmuting
-    await unmot.edit("```Unmuting...```")
+    await unmot.edit("`Unmuting...`")
     user = await helpers.get_user_from_event(unmot)
     if not user:
         await unmoot.edit(
@@ -447,7 +447,7 @@ async def unmoot(unmot):
 
     try:
         await unmot.client(EditBannedRequest(unmot.chat_id, user.id, UNMUTE_RIGHTS))
-        await unmot.edit("```Unmuted!```")
+        await unmot.edit("`Unmuted!`")
     except UserIdInvalidError:
         await unmot.edit("`Uh oh, my unmute logic broke!`")
         return
@@ -527,7 +527,7 @@ async def ungmoot(un_gmute):
     else:
 
         # Inform about success
-        await un_gmute.edit("```Ungmuted!```")
+        await un_gmute.edit("`Ungmuted!`")
         if BOTLOG:
             await un_gmute.client.send_message(
                 BOTLOG_CHATID,
