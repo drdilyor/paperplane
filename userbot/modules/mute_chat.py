@@ -23,7 +23,7 @@ async def unmute_chat(unm_e):
         await unm_e.edit("`Database connections failing!`")
         return
     MONGO.bot.mute_chats.delete_one({"chat_id": unm_e.chat_id})
-    await unm_e.edit("```Unmuted this chat!```")
+    await unm_e.edit("`Unmuted this chat!`")
 
 
 @register(outgoing=True, pattern=r"^.mutechat$")

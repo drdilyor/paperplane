@@ -16,12 +16,13 @@ from google_images_download import google_images_download
 from googletrans import LANGUAGES, Translator
 from gtts import gTTS, gTTSError
 from requests import get
+import serpapi
 from search_engine_parser.core.engines.google import Search as GoogleSearch
 from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WOLFRAM_ID
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, SERPAPI_KEY, WOLFRAM_ID
 from userbot.events import register, grp_exclude
 
 # Default language to EN
@@ -65,6 +66,10 @@ async def img_sampler(event):
 @grp_exclude()
 async def gsearch(q_event):
     """For .google command, do a Google search."""
+    if SERPAPI_KEY is None:
+        await q_event.edit("Please set your SERPAPI_KEY first !\n")
+        return
+
     textx = await q_event.get_reply_message()
     query = q_event.pattern_match.group(1)
 
@@ -80,16 +85,26 @@ async def gsearch(q_event):
 
     await q_event.edit("`Searching...`")
 
-    search_args = (str(query), 1)
-    googsearch = GoogleSearch()
+    params = {
+      "api_key": SERPAPI_KEY,
+      "engine": "google",
+      "google_domain": "google.com",
+      "safe": "active",
+      "q": query,
+      "hl": LANG,
+    }
+
+
     try:
-        gresults = await googsearch.async_search(*search_args)
+        search = serpapi.GoogleSearch(params)
+        results = search.get_dict()
         msg = ""
         for i in range(0, 5):
             try:
-                title = gresults["titles"][i]
-                link = gresults["links"][i]
-                desc = gresults["descriptions"][i]
+                res = results["organic_results"][i]
+                title = res["title"]
+                link = res["link"]
+                desc = res["snippet"]
                 msg += f"{i+1}. [{title}]({link})\n`{desc}`\n\n"
             except IndexError:
                 break
