@@ -12,6 +12,7 @@ gitpython
 google-search-results
 google-api-python-client
 googletrans>=2.4.0
+hyper
 hachoir
 heroku3
 humanize

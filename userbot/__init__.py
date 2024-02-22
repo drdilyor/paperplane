@@ -76,6 +76,8 @@ MONGO_DB_URI = os.environ.get("MONGO_DB_URI") or None
 
 SERPAPI_KEY = os.environ.get("SERPAPI_KEY") or None
 
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") or None
+
 SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY") or None
 
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID") or None

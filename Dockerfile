@@ -17,6 +17,8 @@ WORKDIR /usr/src/app
 
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
+# there are some dependency conflicts
+RUN pip install -U openai
 
 COPY . .
 CMD ["bash","./init/start.sh"]

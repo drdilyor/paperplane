@@ -13,7 +13,7 @@ from urllib.parse import quote_plus
 import asyncurban
 from emoji import get_emoji_regexp
 from google_images_download import google_images_download
-from googletrans import LANGUAGES, Translator
+# from googletrans import LANGUAGES, Translator
 from gtts import gTTS, gTTSError
 from requests import get
 import serpapi
