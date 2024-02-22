@@ -99,13 +99,29 @@ async def gsearch(q_event):
         search = serpapi.GoogleSearch(params)
         results = search.get_dict()
         msg = ""
+
+        if "answer_box" in results and "definitions" in results["answer_box"]:
+            ab = results["answer_box"]
+            msg += "Dictionary: {syllables}\n".format(**ab)
+            for i in range(min(3, len(ab["definitions"]))):
+                msg += "{}. {}\n".format(i+1, ab["definitions"][i])
+            msg += "\n"
+
+        if "knowledge_graph" in results:
+            kg = results["knowledge_graph"]
+            msg += "**{}**".format(kg["title"])
+            msg += " ({})\n".format(kg["type"]) if kg.get("type") else "\n"
+            msg += "{}".format(kg["description"])
+            msg += " [{name}]({link})\n".format(**kg["source"]) if kg.get("source") else "\n"
+            msg += "\n"
+
         for i in range(0, 5):
             try:
                 res = results["organic_results"][i]
                 title = res["title"]
                 link = res["link"]
                 desc = res["snippet"]
-                msg += f"{i+1}. [{title}]({link})\n`{desc}`\n\n"
+                msg += f"{i+1}. [{title}]({link})\n{desc}\n\n"
             except IndexError:
                 break
         await q_event.edit(
