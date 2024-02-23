@@ -16,7 +16,7 @@ from userbot.events import register, grp_exclude
 SYSTEM_MSG = "You are a helpful assistant that gives concise answers and responses."
 EDIT_DELAY = 0.5
 
-@register(outgoing=True, pattern=r"^.gpt(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.gpt(?:\s|$)(.*)")
 @grp_exclude()
 async def gsearch(q_event):
     """For .google command, do a Google search."""
@@ -25,7 +25,7 @@ async def gsearch(q_event):
         return
 
     textx = await q_event.get_reply_message()
-    query = q_event.pattern_match.group(1)
+    query = q_event.pattern_match[1]
 
     if query:
         pass
@@ -38,7 +38,7 @@ async def gsearch(q_event):
         )
         return
 
-    text: str = q_event.message.text[5:] + "\n\n"
+    text: str = (q_event.pattern_match[1] or "") + "\n\n"
     await q_event.edit(text + "...")
 
     try:
@@ -55,6 +55,7 @@ async def gsearch(q_event):
         for chunk in stream:
             if chunk.choices[0].delta.content is not None:
                 text += chunk.choices[0].delta.content
+                print(chunk.choices[0].delta.content, end="")
                 if time.time() >= last_edit + EDIT_DELAY:
                     last_edit = time.time()
                     await q_event.edit(text + "...")
@@ -69,7 +70,7 @@ CMD_HELP.update(
         "gpt": [
             "Gpt",
             " - `.gpt [<text>]`: "
-            "Send replied message or <text> to ChatGPT model."
+            "Send replied message or <text> to gpt-3.5-turbo model."
         ]
     }
 )

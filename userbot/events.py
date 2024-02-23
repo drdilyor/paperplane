@@ -6,6 +6,7 @@
 """ Userbot module for managing events.
  One of the main components of the userbot. """
 
+import logging
 import sys
 from asyncio import create_subprocess_shell as asyncsubshell
 from asyncio import subprocess as asyncsub
@@ -24,7 +25,9 @@ def register(**args):
     pattern = args.get("pattern")
     disable_edited = args.get("disable_edited", False)
     ignore_unsafe = args.get("ignore_unsafe", False)
-    unsafe_pattern = r"^[^/!#@\$A-Za-z'\"]"
+    # i'm not sure why they replace ^. with this, maybe because at the beginning
+    # they didn't know that ^. matches any letter instead of just dot... also the value of this was changed
+    unsafe_pattern = r"^\."
     group_only = args.get("group_only", False)
     disable_errors = args.get("disable_errors", False)
     insecure = args.get("insecure", False)
