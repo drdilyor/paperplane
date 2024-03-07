@@ -18,7 +18,7 @@ EDIT_DELAY = 0.5
 
 @register(outgoing=True, pattern=r"^.gpt(?:\s|$)(.*)")
 @grp_exclude()
-async def gsearch(q_event):
+async def gpt(q_event):
     """For .google command, do a Google search."""
     if OPENAI_API_KEY is None:
         await q_event.edit("Please set your OPENAI_API_KEY first !\n")
@@ -29,7 +29,7 @@ async def gsearch(q_event):
 
     if query:
         pass
-    if textx:
+    if textx and textx.text:
         query = textx.text + "\n\n" + query
 
     if not query:
