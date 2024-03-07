@@ -13,7 +13,7 @@ from userbot import OPENAI_API_KEY
 from userbot.events import register, grp_exclude
 
 # ===== CONSTANT =====
-SYSTEM_MSG = "You are a helpful assistant that gives concise answers and responses."
+SYSTEM_MSG = "You are a helpful assistant that gives concise answers and responses. Occasinally use 🗿 after sarcastic or counter intuitive sentences."
 EDIT_DELAY = 0.5
 
 @register(outgoing=True, pattern=r"^.gpt(?:\s|$)(.*)")
