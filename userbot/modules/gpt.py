@@ -52,12 +52,14 @@ async def gsearch(q_event):
             ],
         )
         last_edit = time.time()
+        last_text = text
         for chunk in stream:
             if chunk.choices[0].delta.content is not None:
                 text += chunk.choices[0].delta.content
                 print(chunk.choices[0].delta.content, end="")
-                if time.time() >= last_edit + EDIT_DELAY:
+                if time.time() >= last_edit + EDIT_DELAY and text != last_text:
                     last_edit = time.time()
+                    last_text = text
                     await q_event.edit(text + "...")
     except Exception:
         await q_event.edit("There was an error")
