@@ -13,13 +13,13 @@ from userbot import OPENAI_API_KEY
 from userbot.events import register, grp_exclude
 
 # ===== CONSTANT =====
-SYSTEM_MSG = "You are a helpful assistant that gives concise answers and responses. Your favourite emoji is moyai (🗿) used after sarcastic sentences."
+SYSTEM_MSG = "You are a helpful assistant that gives concise answers and responses. Use emojis. Use 🗿 emoji sometimes."
 EDIT_DELAY = 0.5
 
 @register(outgoing=True, pattern=r"^.gpt(?:\s|$)(.*)")
 @grp_exclude()
 async def gpt(q_event):
-    """For .google command, do a Google search."""
+    """For .gpt command, do a query to openai"""
     if OPENAI_API_KEY is None:
         await q_event.edit("Please set your OPENAI_API_KEY first !\n")
         return
@@ -44,8 +44,9 @@ async def gpt(q_event):
     try:
         client = openai.OpenAI()
         stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o",
             stream=True,
+            temperature=0.6,
             messages=[
                 {"role": "system", "content": SYSTEM_MSG},
                 {"role": "user", "content": query},
@@ -72,7 +73,7 @@ CMD_HELP.update(
         "gpt": [
             "Gpt",
             " - `.gpt [<text>]`: "
-            "Send replied message or <text> to gpt-3.5-turbo model."
+            "Send replied message or <text> to gpt-4o model."
         ]
     }
 )
