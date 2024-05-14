@@ -6,7 +6,10 @@
 """ Userbot module for getting the weather of a city. """
 
 import openai
+import logging
+import base64
 import time
+
 
 from userbot import CMD_HELP
 from userbot import OPENAI_API_KEY
@@ -24,32 +27,47 @@ async def gpt(q_event):
         await q_event.edit("Please set your OPENAI_API_KEY first !\n")
         return
 
-    textx = await q_event.get_reply_message()
+    reply = await q_event.get_reply_message()
     query = q_event.pattern_match[1]
+    images: list[bytes] = []
 
     if query:
         pass
-    if textx and textx.text:
-        query = textx.text + "\n\n" + query
+    if reply and reply.text:
+        query = reply.text + "\n\n" + query
 
-    if not query:
+    if reply and reply.photo:
+        images.append(await reply.download_media(file=bytes))
+
+    if q_event.message.photo:
+        images.append(await q_event.message.download_media(file=bytes))
+
+    if not query and not images:
         await q_event.edit(
             "`Pass a query as an argument or reply to a message for AI completion!`"
         )
         return
 
     text: str = (q_event.pattern_match[1] or "") + "\n\n"
+    if images:
+        text += f"__Includes {len(images)} image(s)__\n\n"
     await q_event.edit(text + "...")
 
     try:
         client = openai.OpenAI()
+        content = [{"type": "text", "text": query}]
+        for image in images:
+            content.append({"type": "image_url", "image_url": {
+                "url": f"data:image/jpeg;base64,{base64.b64encode(image).decode('utf-8')}"
+            }})
+
         stream = client.chat.completions.create(
             model="gpt-4o",
             stream=True,
             temperature=0.6,
             messages=[
                 {"role": "system", "content": SYSTEM_MSG},
-                {"role": "user", "content": query},
+                {"role": "user", "content": content},
             ],
         )
         last_edit = time.time()
